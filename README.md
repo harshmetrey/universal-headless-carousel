@@ -21,9 +21,9 @@ A cross-platform (React & React Native) carousel npm package with **ready-to-use
 
 | Package | Version | Description |
 | :--- | :--- | :--- |
-| [`universal-headless-carousel-core`](./packages/core) | `1.0.3` | Framework-agnostic state machine & math engine |
-| [`universal-headless-carousel-web`](./packages/web) | `1.0.3` | Web engine & `<Carousel />` drop-in component |
-| [`universal-headless-carousel-native`](./packages/native) | `1.0.3` | React Native engine & `<NativeCarousel />` drop-in component |
+| [`universal-headless-carousel-core`](./packages/core) | `1.1.0` | Framework-agnostic state machine & math engine |
+| [`universal-headless-carousel-web`](./packages/web) | `1.1.0` | Web engine & `<Carousel />` drop-in component |
+| [`universal-headless-carousel-native`](./packages/native) | `1.1.0` | React Native engine & `<NativeCarousel />` drop-in component |
 
 ---
 

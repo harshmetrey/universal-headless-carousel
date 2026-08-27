@@ -1,6 +1,6 @@
 {
   "name": "universal-headless-carousel-native",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "React Native FlatList/ScrollView engine wrapper for universal-headless-carousel",
   "license": "MIT",
   "author": "Harsh Metrey",
