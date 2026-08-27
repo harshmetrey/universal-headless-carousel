@@ -1,9 +1,12 @@
 # universal-headless-carousel 🎠
 
+[![npm version](https://img.shields.io/npm/v/universal-headless-carousel.svg)](https://www.npmjs.com/package/universal-headless-carousel)
 [![CI/CD Publish Pipeline](https://github.com/harshmetrey/universal-headless-carousel/actions/workflows/publish.yml/badge.svg)](https://github.com/harshmetrey/universal-headless-carousel/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A cross-platform (React & React Native) carousel npm package with **ready-to-use drop-in UI components** AND **headless hooks**. Features custom arrows, custom pagination dots, custom card dimensions (`cardWidth` / `cardHeight`), CSS Scroll Snap, and native `FlatList` physics. Zero forced UI, 100% style customization, and production-grade accessibility (A11y).
+A cross-platform (React & React Native) carousel package offering **ready-to-use drop-in UI components** AND **headless hooks**.
+
+Built with TypeScript, CSS Scroll Snap, and native `FlatList` physics. Features custom arrows, custom pagination dots, custom card dimensions (`cardWidth` / `cardHeight`), 100% style customization, and production-grade accessibility (A11y).
 
 ---
 
@@ -41,15 +44,15 @@ pnpm add universal-headless-carousel
 
 ## 💡 Quick Start
 
-### 🌐 1. Custom Web Component (`<Carousel />`)
+### 🌐 1. Web Drop-in Component (`<Carousel />`)
 
-Pass custom card dimensions (`cardWidth`, `cardHeight`), custom arrow icons (`prevArrow`, `nextArrow`), or custom pagination dots (`customDot`):
+Zero boilerplate! Pass `items`, custom card dimensions (`cardWidth`, `cardHeight`), custom arrow icons (`prevArrow`, `nextArrow`), or custom pagination dots (`customDot`):
 
 ```tsx
 import React from 'react';
 import { Carousel } from 'universal-headless-carousel/web';
 
-export function WebComponentExample() {
+export function WebCarouselDemo() {
   return (
     <Carousel
       cardWidth={320}
@@ -62,8 +65,8 @@ export function WebComponentExample() {
       loop
       autoplay={3000}
       showArrows
-      prevArrow={<span>◀ Left</span>}
-      nextArrow={<span>Right ▶</span>}
+      prevArrow={<span>◀ Prev</span>}
+      nextArrow={<span>Next ▶</span>}
       showDots
       customDot={(index, isActive) => (
         <span style={{ color: isActive ? '#3b82f6' : '#cbd5e1', fontSize: 18 }}>
@@ -77,14 +80,16 @@ export function WebComponentExample() {
 
 ---
 
-### 📱 2. Custom React Native Component (`<NativeCarousel />`)
+### 📱 2. React Native Drop-in Component (`<NativeCarousel />`)
+
+Zero `FlatList` boilerplate required!
 
 ```tsx
 import React from 'react';
 import { View, Text } from 'react-native';
 import { NativeCarousel } from 'universal-headless-carousel/native';
 
-export function NativeComponentExample() {
+export function NativeCarouselDemo() {
   return (
     <NativeCarousel
       cardWidth={300}
@@ -99,8 +104,8 @@ export function NativeComponentExample() {
       ]}
       loop
       showArrows
-      prevArrow={<Text style={{ fontSize: 16 }}>◀ Prev</Text>}
-      nextArrow={<Text style={{ fontSize: 16 }}>Next ▶</Text>}
+      prevArrow={<Text style={{ fontSize: 16, fontWeight: 'bold' }}>◀ Prev</Text>}
+      nextArrow={<Text style={{ fontSize: 16, fontWeight: 'bold' }}>Next ▶</Text>}
       showDots
       customDot={(index, isActive) => (
         <Text style={{ color: isActive ? '#3b82f6' : '#cbd5e1', fontSize: 16, marginHorizontal: 4 }}>
@@ -116,7 +121,7 @@ export function NativeComponentExample() {
 
 ### 🛠 3. Headless Web Hook (`useWebCarousel`)
 
-For custom layouts or DOM-level control:
+For low-level DOM control:
 
 ```tsx
 import React from 'react';
@@ -124,7 +129,7 @@ import { useWebCarousel } from 'universal-headless-carousel/web';
 
 const items = ['Slide 1', 'Slide 2', 'Slide 3'];
 
-export function CustomWebCarousel() {
+export function HeadlessWebCarousel() {
   const { activeIndex, next, prev, getContainerProps, getItemProps } = useWebCarousel({
     itemsCount: items.length,
     loop: true,
@@ -146,6 +151,27 @@ export function CustomWebCarousel() {
   );
 }
 ```
+
+---
+
+## ⚙️ Component API Reference
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `ReactNode[]` | `[]` | Array of slide items to render |
+| `cardWidth` | `number \| string` | `-` | Custom width of slide card (e.g. `300`, `'80%'`, `'300px'`) |
+| `cardHeight` | `number \| string` | `-` | Custom height of slide card (e.g. `200`, `'200px'`) |
+| `showArrows` | `boolean` | `true` | Show or hide Prev/Next navigation arrows |
+| `prevArrow` | `ReactNode \| ((props) => ReactNode)` | `undefined` | Custom previous arrow icon or render function |
+| `nextArrow` | `ReactNode \| ((props) => ReactNode)` | `undefined` | Custom next arrow icon or render function |
+| `showDots` | `boolean` | `true` | Show or hide pagination dots indicator |
+| `customDot` | `(index, isActive) => ReactNode` | `undefined` | Custom render function for pagination dots |
+| `loop` | `boolean` | `false` | Enable infinite looping navigation |
+| `autoplay` | `number \| boolean` | `0` | Autoplay interval in milliseconds (e.g. `3000`) |
+| `startIndex` | `number` | `0` | Initial active slide index |
+| `snapAlign` | `'start' \| 'center' \| 'end'` | `'center'` | Web scroll snap alignment mode |
+| `cardStyle` | `CSSProperties` / `ViewStyle` | `undefined` | Custom slide container inline styles |
+| `style` / `containerStyle` | `CSSProperties` / `ViewStyle` | `undefined` | Custom root container inline styles |
 
 ---
 
