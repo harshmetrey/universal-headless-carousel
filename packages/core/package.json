@@ -1,7 +1,13 @@
 {
   "name": "universal-headless-carousel-core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Headless, framework-agnostic carousel logic & accessibility state engine",
+  "license": "MIT",
+  "author": "Harsh Metrey",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harshmetrey/universal-headless-carousel.git"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

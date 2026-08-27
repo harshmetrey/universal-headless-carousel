@@ -1,8 +1,31 @@
 {
   "name": "universal-headless-carousel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "packageManager": "npm@11.16.0",
   "description": "Headless, cross-platform (React & React Native) carousel engine with CSS Scroll Snap & FlatList physics",
+  "license": "MIT",
+  "author": "Harsh Metrey",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harshmetrey/universal-headless-carousel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/harshmetrey/universal-headless-carousel/issues"
+  },
+  "homepage": "https://github.com/harshmetrey/universal-headless-carousel#readme",
+  "keywords": [
+    "carousel",
+    "headless",
+    "react",
+    "react-native",
+    "slider",
+    "swiper",
+    "scroll-snap",
+    "accessibility",
+    "a11y",
+    "typescript",
+    "ui-components"
+  ],
   "main": "./packages/core/dist/index.js",
   "module": "./packages/core/dist/index.mjs",
   "types": "./packages/core/dist/index.d.ts",
