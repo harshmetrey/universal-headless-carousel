@@ -193,6 +193,14 @@
       margin-top: 1.25rem;
     }
 
+    .controls.center-only {
+      justify-content: center;
+    }
+
+    .controls.hidden-all {
+      display: none;
+    }
+
     button.btn-nav {
       padding: 0.5rem 1.2rem;
       border-radius: 8px;
@@ -204,6 +212,10 @@
       transition: all 0.15s ease;
     }
 
+    button.btn-nav.hidden-btn {
+      display: none;
+    }
+
     button.btn-nav:hover {
       opacity: 0.85;
     }
@@ -212,6 +224,10 @@
       display: flex;
       gap: 0.5rem;
       align-items: center;
+    }
+
+    .pagination.hidden-dots {
+      display: none;
     }
 
     .dot {
@@ -277,6 +293,22 @@
     </div>
 
     <div class="control-group">
+      <label for="arrowsSelect">Navigation Arrows</label>
+      <select id="arrowsSelect">
+        <option value="true" selected>Visible</option>
+        <option value="false">Hidden</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="dotsSelect">Pagination Dots</label>
+      <select id="dotsSelect">
+        <option value="true" selected>Visible</option>
+        <option value="false">Hidden</option>
+      </select>
+    </div>
+
+    <div class="control-group">
       <label for="themeSelect">UI Theme</label>
       <select id="themeSelect">
         <option value="light" selected>Minimal Light</option>
@@ -291,7 +323,7 @@
       <!-- Slides dynamically generated -->
     </div>
 
-    <div class="controls">
+    <div class="controls" id="controlsBar">
       <button class="btn-nav" id="prev">Previous</button>
       <div class="pagination" id="pagination">
         <!-- Dots dynamically generated -->
@@ -307,6 +339,8 @@
     let autoplayInterval = 0;
     let itemsCount = 5;
     let activeIndex = 0;
+    let showArrows = true;
+    let showDots = true;
     
     let isProgrammatic = false;
     let scrollTimer = null;
@@ -314,6 +348,9 @@
 
     const viewport = document.getElementById('viewport');
     const pagination = document.getElementById('pagination');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const controlsBar = document.getElementById('controlsBar');
 
     function rebuildDOM() {
       viewport.innerHTML = '';
@@ -336,6 +373,32 @@
         dot.setAttribute('data-active', i === activeIndex ? 'true' : 'false');
         dot.addEventListener('click', () => scrollTo(i));
         pagination.appendChild(dot);
+      }
+
+      updateControlsVisibility();
+    }
+
+    function updateControlsVisibility() {
+      if (showArrows) {
+        prevBtn.classList.remove('hidden-btn');
+        nextBtn.classList.remove('hidden-btn');
+      } else {
+        prevBtn.classList.add('hidden-btn');
+        nextBtn.classList.add('hidden-btn');
+      }
+
+      if (showDots) {
+        pagination.classList.remove('hidden-dots');
+      } else {
+        pagination.classList.add('hidden-dots');
+      }
+
+      if (!showArrows && showDots) {
+        controlsBar.className = 'controls center-only';
+      } else if (!showArrows && !showDots) {
+        controlsBar.className = 'controls hidden-all';
+      } else {
+        controlsBar.className = 'controls';
       }
     }
 
@@ -429,6 +492,16 @@
       if (activeIndex >= itemsCount) activeIndex = 0;
       rebuildDOM();
       scrollTo(activeIndex);
+    });
+
+    document.getElementById('arrowsSelect').addEventListener('change', (e) => {
+      showArrows = e.target.value === 'true';
+      updateControlsVisibility();
+    });
+
+    document.getElementById('dotsSelect').addEventListener('change', (e) => {
+      showDots = e.target.value === 'true';
+      updateControlsVisibility();
     });
 
     document.getElementById('themeSelect').addEventListener('change', (e) => {
