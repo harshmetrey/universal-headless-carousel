@@ -103,6 +103,7 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      max-width: 900px;
     }
 
     .control-group {
@@ -141,7 +142,7 @@
     /* Headless Carousel Container */
     .carousel-container {
       width: 100%;
-      max-width: 650px;
+      max-width: 700px;
     }
 
     .carousel-viewport {
@@ -159,12 +160,12 @@
       display: none;
     }
 
-    /* Flexible Card Styling */
+    /* Flexible Slide Wrapper */
     .carousel-slide {
       scroll-snap-align: center;
       flex-shrink: 0;
       width: 75%;
-      height: 240px;
+      min-height: 250px;
       border-radius: 16px;
       background-color: var(--card-bg);
       border: var(--card-border);
@@ -172,10 +173,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 600;
       color: var(--card-text);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
 
     .carousel-slide[data-active="true"] {
@@ -183,6 +186,113 @@
       color: var(--active-text);
       box-shadow: var(--active-shadow);
       transform: scale(1.02);
+    }
+
+    /* Custom Component Styles */
+    .custom-product-card {
+      width: 100%;
+      height: 100%;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .product-badge {
+      align-self: flex-start;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      background: #2563eb;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .product-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+
+    .product-price {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #10b981;
+      margin-top: 0.25rem;
+    }
+
+    .product-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-start;
+      margin-top: 0.75rem;
+    }
+
+    .custom-profile-card {
+      width: 100%;
+      height: 100%;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .profile-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .profile-role {
+      font-size: 0.85rem;
+      color: var(--subtext);
+      margin-top: 0.15rem;
+    }
+
+    .custom-banner-card {
+      width: 100%;
+      height: 100%;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%);
+      color: white;
+      text-align: left;
+    }
+
+    .banner-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .banner-tag {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     /* Clean Controls */
@@ -256,6 +366,16 @@
 
   <!-- Dropdown Customizer Toolbar -->
   <div class="customizer-toolbar">
+    <div class="control-group">
+      <label for="componentSelect">Custom Component</label>
+      <select id="componentSelect">
+        <option value="text" selected>Simple Text Card</option>
+        <option value="product">Product Card</option>
+        <option value="profile">Profile Card</option>
+        <option value="banner">Media Banner</option>
+      </select>
+    </div>
+
     <div class="control-group">
       <label for="snapAlignSelect">Snap Alignment</label>
       <select id="snapAlignSelect">
@@ -333,7 +453,72 @@
   </div>
 
   <script>
+    // Custom Component Renderers
+    const componentRenderers = {
+      text: (index) => `<span>Slide ${index + 1}</span>`,
+      
+      product: (index) => {
+        const products = [
+          { title: 'Wireless Headphones Pro', price: '$299', badge: 'Best Seller' },
+          { title: 'Smart Fitness Watch Ultra', price: '$399', badge: 'New Arrival' },
+          { title: 'Ergonomic Mechanical Keyboard', price: '$189', badge: 'Featured' },
+          { title: '4K Ultra-Wide Monitor', price: '$699', badge: 'Hot Deal' },
+          { title: 'Noise Cancelling Earbuds', price: '$149', badge: 'Popular' },
+          { title: 'Smart Desk Lamp', price: '$79', badge: 'Minimal' },
+          { title: 'Portable Bluetooth Speaker', price: '$119', badge: 'Outdoor' },
+          { title: 'VR Headset Gen 2', price: '$499', badge: 'Next-Gen' }
+        ];
+        const p = products[index % products.length];
+        return `
+          <div class="custom-product-card">
+            <span class="product-badge">${p.badge}</span>
+            <div>
+              <div class="product-title">${p.title}</div>
+              <div class="product-price">${p.price}</div>
+            </div>
+            <button class="product-btn" onclick="alert('Added ${p.title} to cart!')">Add to Cart</button>
+          </div>
+        `;
+      },
+
+      profile: (index) => {
+        const profiles = [
+          { name: 'Sarah Jenkins', role: 'Lead UI/UX Designer', initial: 'SJ' },
+          { name: 'Alex Rivera', role: 'Senior Frontend Engineer', initial: 'AR' },
+          { name: 'Michael Chen', role: 'Product Manager', initial: 'MC' },
+          { name: 'Elena Rostova', role: 'Fullstack Developer', initial: 'ER' },
+          { name: 'David Kim', role: 'DevOps Architect', initial: 'DK' }
+        ];
+        const prof = profiles[index % profiles.length];
+        return `
+          <div class="custom-profile-card">
+            <div class="avatar">${prof.initial}</div>
+            <div class="profile-name">${prof.name}</div>
+            <div class="profile-role">${prof.role}</div>
+          </div>
+        `;
+      },
+
+      banner: (index) => {
+        const banners = [
+          { title: 'Explore the Deep Universe', tag: 'Space Science' },
+          { title: 'Future of Neural Computing', tag: 'Artificial Intelligence' },
+          { title: 'Sustainable Solar Energy', tag: 'Green Tech' },
+          { title: 'Next-Gen Quantum Chips', tag: 'Hardware' },
+          { title: 'Autonomous Electric Drive', tag: 'Mobility' }
+        ];
+        const b = banners[index % banners.length];
+        return `
+          <div class="custom-banner-card">
+            <span class="banner-tag">${b.tag}</span>
+            <div class="banner-title">${b.title}</div>
+          </div>
+        `;
+      }
+    };
+
     // State Config
+    let selectedComponent = 'text';
     let snapAlign = 'center';
     let loop = true;
     let autoplayInterval = 0;
@@ -364,7 +549,11 @@
         slide.setAttribute('data-active', i === activeIndex ? 'true' : 'false');
         slide.setAttribute('role', 'group');
         slide.setAttribute('aria-roledescription', 'slide');
-        slide.innerHTML = `<span>Slide ${i + 1}</span>`;
+        
+        // Render custom component content
+        const renderer = componentRenderers[selectedComponent] || componentRenderers.text;
+        slide.innerHTML = renderer(i);
+
         viewport.appendChild(slide);
 
         const dot = document.createElement('div');
@@ -472,6 +661,12 @@
     };
 
     // Dropdown Event Listeners
+    document.getElementById('componentSelect').addEventListener('change', (e) => {
+      selectedComponent = e.target.value;
+      rebuildDOM();
+      scrollTo(activeIndex);
+    });
+
     document.getElementById('snapAlignSelect').addEventListener('change', (e) => {
       snapAlign = e.target.value;
       rebuildDOM();
