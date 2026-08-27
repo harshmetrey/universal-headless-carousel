@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Headless Carousel Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --accent-cyan: #06b6d4;
+      --accent-violet: #8b5cf6;
+      --accent-pink: #ec4899;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow-x: hidden;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
+      border: 1px solid var(--glass-border);
+      color: var(--accent-cyan);
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: var(--text-sub);
+      font-size: 1.1rem;
+    }
+
+    .carousel-container-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Headless Web CSS Scroll Snap Container */
+    .carousel-viewport {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+      padding: 1.5rem 0.5rem;
+      border-radius: 24px;
+    }
+
+    .carousel-viewport::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    .carousel-slide {
+      scroll-snap-align: center;
+      flex-shrink: 0;
+      width: 320px;
+      height: 380px;
+      border-radius: 20px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .carousel-slide[data-active="true"] {
+      border-color: rgba(6, 182, 212, 0.5);
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.25), 0 20px 40px rgba(0, 0, 0, 0.5);
+      transform: scale(1.03);
+    }
+
+    .slide-gradient-1 { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%); }
+    .slide-gradient-2 { background: linear-gradient(135deg, #831843 0%, #9d174d 50%, #be185d 100%); }
+    .slide-gradient-3 { background: linear-gradient(135deg, #134e4a 0%, #0f766e 50%, #0d9488 100%); }
+    .slide-gradient-4 { background: linear-gradient(135deg, #312e81 0%, #581c87 50%, #7e22ce 100%); }
+    .slide-gradient-5 { background: linear-gradient(135deg, #701a75 0%, #86198f 50%, #a21caf 100%); }
+
+    .slide-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.8;
+    }
+
+    .slide-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-top: 0.5rem;
+    }
+
+    .slide-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .btn-slide {
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s ease;
+      align-self: flex-start;
+    }
+
+    .btn-slide:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    /* Controls bar */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+
+    .nav-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+    }
+
+    .pagination-dots {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dot[data-active="true"] {
+      width: 32px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet));
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="badge">HEADLESS ARCHITECTURE</div>
+    <h1>Universal Headless Carousel</h1>
+    <p class="subtitle">CSS Scroll Snap & Active State Machine Interactive Demo</p>
+  </div>
+
+  <div class="carousel-container-wrapper">
+    <div class="carousel-viewport" id="carouselViewport" role="region" aria-roledescription="carousel" aria-label="Featured Innovations" tabindex="0">
+      
+      <div class="carousel-slide slide-gradient-1" data-index="0" data-active="true" role="group" aria-roledescription="slide" aria-label="Slide 1 of 5">
+        <div>
+          <span class="slide-tag">01 / Innovation</span>
+          <h2 class="slide-title">Quantum Watch Ultra</h2>
+          <p class="slide-desc">Next-gen biometric tracking with holographic glass display.</p>
+        </div>
+        <button class="btn-slide">Explore Feature</button>
+      </div>
+
+      <div class="carousel-slide slide-gradient-2" data-index="1" data-active="false" role="group" aria-roledescription="slide" aria-label="Slide 2 of 5">
+        <div>
+          <span class="slide-tag">02 / Audio</span>
+          <h2 class="slide-title">Aura Earbuds Pro</h2>
+          <p class="slide-desc">Spatial audio with lossless active acoustic noise cancellation.</p>
+        </div>
+        <button class="btn-slide">Explore Feature</button>
+      </div>
+
+      <div class="carousel-slide slide-gradient-3" data-index="2" data-active="false" role="group" aria-roledescription="slide" aria-label="Slide 3 of 5">
+        <div>
+          <span class="slide-tag">03 / Computing</span>
+          <h2 class="slide-title">Nexus Laptop Max</h2>
+          <p class="slide-desc">M3 Chipset architecture with 40-hour liquid cooling battery.</p>
+        </div>
+        <button class="btn-slide">Explore Feature</button>
+      </div>
+
+      <div class="carousel-slide slide-gradient-4" data-index="3" data-active="false" role="group" aria-roledescription="slide" aria-label="Slide 4 of 5">
+        <div>
+          <span class="slide-tag">04 / Gaming</span>
+          <h2 class="slide-title">Vortex VR Motion</h2>
+          <p class="slide-desc">Zero-latency haptic feedback headset with retina OLED displays.</p>
+        </div>
+        <button class="btn-slide">Explore Feature</button>
+      </div>
+
+      <div class="carousel-slide slide-gradient-5" data-index="4" data-active="false" role="group" aria-roledescription="slide" aria-label="Slide 5 of 5">
+        <div>
+          <span class="slide-tag">05 / Vision</span>
+          <h2 class="slide-title">Cyber Lens AI</h2>
+          <p class="slide-desc">Augmented real-time neural translation HUD interface.</p>
+        </div>
+        <button class="btn-slide">Explore Feature</button>
+      </div>
+
+    </div>
+
+    <div class="controls-bar">
+      <button class="nav-btn" id="prevBtn" aria-label="Previous Slide">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+
+      <div class="pagination-dots" id="dotsContainer">
+        <div class="dot" data-index="0" data-active="true"></div>
+        <div class="dot" data-index="1" data-active="false"></div>
+        <div class="dot" data-index="2" data-active="false"></div>
+        <div class="dot" data-index="3" data-active="false"></div>
+        <div class="dot" data-index="4" data-active="false"></div>
+      </div>
+
+      <button class="nav-btn" id="nextBtn" aria-label="Next Slide">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let activeIndex = 0;
+    const itemsCount = 5;
+    const viewport = document.getElementById('carouselViewport');
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const dots = Array.from(document.querySelectorAll('.dot'));
+    let isProgrammaticScroll = false;
+    let scrollTimeout;
+
+    function renderState(index) {
+      activeIndex = (index + itemsCount) % itemsCount;
+      slides.forEach((slide, i) => {
+        const isActive = i === activeIndex;
+        slide.setAttribute('data-active', isActive ? 'true' : 'false');
+        slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      });
+      dots.forEach((dot, i) => {
+        dot.setAttribute('data-active', i === activeIndex ? 'true' : 'false');
+      });
+    }
+
+    function scrollToSlide(index) {
+      renderState(index);
+      const targetSlide = slides[activeIndex];
+      if (targetSlide) {
+        isProgrammaticScroll = true;
+        clearTimeout(scrollTimeout);
+        const offsetLeft = targetSlide.offsetLeft - (viewport.clientWidth - targetSlide.clientWidth) / 2;
+        viewport.scrollTo({ left: Math.max(0, offsetLeft), behavior: 'smooth' });
+        scrollTimeout = setTimeout(() => {
+          isProgrammaticScroll = false;
+        }, 400);
+      }
+    }
+
+    // Scroll event listener: sync active index and pagination during manual swiping
+    viewport.addEventListener('scroll', () => {
+      if (isProgrammaticScroll) return;
+
+      const currentScroll = viewport.scrollLeft;
+      let closestIndex = activeIndex;
+      let minDistance = Infinity;
+
+      slides.forEach((slide, i) => {
+        const offsetLeft = slide.offsetLeft - (viewport.clientWidth - slide.clientWidth) / 2;
+        const distance = Math.abs(offsetLeft - currentScroll);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = i;
+        }
+      });
+
+      if (closestIndex !== activeIndex) {
+        renderState(closestIndex);
+      }
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => scrollToSlide(activeIndex - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => scrollToSlide(activeIndex + 1));
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-index'), 10);
+        scrollToSlide(idx);
+      });
+    });
+
+    viewport.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') scrollToSlide(activeIndex - 1);
+      if (e.key === 'ArrowRight') scrollToSlide(activeIndex + 1);
+      if (e.key === 'Home') scrollToSlide(0);
+      if (e.key === 'End') scrollToSlide(itemsCount - 1);
+    });
+  </script>
+</body>
+</html>

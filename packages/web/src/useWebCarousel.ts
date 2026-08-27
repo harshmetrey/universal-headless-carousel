@@ -13,7 +13,9 @@ export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselRe
   const core = useCarousel(coreOptions);
   const containerNodeRef = useRef<HTMLElement | null>(null);
   const itemNodesRef = useRef<Map<number, HTMLElement>>(new Map());
+  
   const isScrollingProgrammatically = useRef<boolean>(false);
+  const isManualScroll = useRef<boolean>(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const setContainerRef = useCallback((node: HTMLElement | null) => {
@@ -60,16 +62,21 @@ export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselRe
         behavior: scrollBehavior
       });
 
-      // Clear lock after scroll animation finishes
+      // Clear programmatic scroll flag after scroll animation completes
       scrollTimeoutRef.current = setTimeout(() => {
         isScrollingProgrammatically.current = false;
-      }, 500);
+      }, 400);
     },
     [calculateScrollOffset, scrollBehavior]
   );
 
-  // Sync scroll position when activeIndex changes from core (e.g. autoplay, next, prev)
+  // Sync scroll position when activeIndex changes in core
   useEffect(() => {
+    // If state change originated from user manual scroll, do not re-trigger programmatic scrollTo
+    if (isManualScroll.current) {
+      isManualScroll.current = false;
+      return;
+    }
     scrollTo(core.activeIndex);
   }, [core.activeIndex, scrollTo]);
 
@@ -80,41 +87,27 @@ export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselRe
       const container = containerNodeRef.current;
       if (!container || options.itemsCount <= 0) return;
 
-      const containerRect = container.getBoundingClientRect();
-      const containerCenter = containerRect.left + containerRect.width / 2;
-
+      const currentScrollLeft = container.scrollLeft;
       let closestIndex = core.activeIndex;
       let minDistance = Infinity;
 
-      itemNodesRef.current.forEach((itemNode, index) => {
-        const itemRect = itemNode.getBoundingClientRect();
-        let targetPoint = itemRect.left + itemRect.width / 2;
-        if (snapAlign === 'start') {
-          targetPoint = itemRect.left;
-        } else if (snapAlign === 'end') {
-          targetPoint = itemRect.right;
-        }
-
-        const containerPoint =
-          snapAlign === 'start'
-            ? containerRect.left
-            : snapAlign === 'end'
-            ? containerRect.right
-            : containerCenter;
-
-        const distance = Math.abs(targetPoint - containerPoint);
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
+      itemNodesRef.current.forEach((_, index) => {
+        const offset = calculateScrollOffset(index);
+        if (offset !== null) {
+          const distance = Math.abs(offset - currentScrollLeft);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
         }
       });
 
       if (closestIndex !== core.activeIndex) {
+        isManualScroll.current = true;
         core.goTo(closestIndex);
       }
     },
-    [core, snapAlign, options.itemsCount]
+    [core, calculateScrollOffset, options.itemsCount]
   );
 
   const getContainerProps = useCallback(
