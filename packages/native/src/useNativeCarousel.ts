@@ -1,5 +1,5 @@
 import { useRef, useCallback, useEffect } from 'react';
-import { useCarousel } from '@universal-headless-carousel/core';
+import { useCarousel } from 'universal-headless-carousel-core';
 import { UseNativeCarouselOptions, UseNativeCarouselReturn, FlatListProps, NativeItemProps } from './types';
 
 export function useNativeCarousel(options: UseNativeCarouselOptions): UseNativeCarouselReturn {

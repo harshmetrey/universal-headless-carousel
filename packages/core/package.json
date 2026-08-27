@@ -1,5 +1,5 @@
 {
-  "name": "@universal-headless-carousel/core",
+  "name": "universal-headless-carousel-core",
   "version": "1.0.0",
   "description": "Headless, framework-agnostic carousel logic & accessibility state engine",
   "main": "./dist/index.js",

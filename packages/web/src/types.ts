@@ -1,5 +1,5 @@
 import { CSSProperties, RefCallback } from 'react';
-import { UseCarouselOptions, UseCarouselReturn, ContainerProps, ItemProps } from '@universal-headless-carousel/core';
+import { UseCarouselOptions, UseCarouselReturn, ContainerProps, ItemProps } from 'universal-headless-carousel-core';
 
 export interface UseWebCarouselOptions extends UseCarouselOptions {
   /**

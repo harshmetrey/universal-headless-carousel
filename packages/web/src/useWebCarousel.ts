@@ -1,5 +1,5 @@
 import { useRef, useCallback, useEffect, UIEvent } from 'react';
-import { useCarousel } from '@universal-headless-carousel/core';
+import { useCarousel } from 'universal-headless-carousel-core';
 import { UseWebCarouselOptions, UseWebCarouselReturn, WebContainerProps, WebItemProps } from './types';
 
 export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselReturn {

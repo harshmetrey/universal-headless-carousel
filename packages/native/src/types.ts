@@ -1,5 +1,5 @@
 import { RefObject } from 'react';
-import { UseCarouselOptions, UseCarouselReturn } from '@universal-headless-carousel/core';
+import { UseCarouselOptions, UseCarouselReturn } from 'universal-headless-carousel-core';
 
 export interface UseNativeCarouselOptions extends UseCarouselOptions {
   /**

@@ -21,9 +21,9 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 
 | Package | Version | Description |
 | :--- | :--- | :--- |
-| [`@universal-headless-carousel/core`](./packages/core) | `1.0.0` | Framework-agnostic state machine & math engine |
-| [`@universal-headless-carousel/web`](./packages/web) | `1.0.0` | Web engine utilizing hardware-accelerated CSS Scroll Snap |
-| [`@universal-headless-carousel/native`](./packages/native) | `1.0.0` | React Native engine using native `FlatList` & viewability sync |
+| [`universal-headless-carousel-core`](./packages/core) | `1.0.0` | Framework-agnostic state machine & math engine |
+| [`universal-headless-carousel-web`](./packages/web) | `1.0.0` | Web engine utilizing hardware-accelerated CSS Scroll Snap |
+| [`universal-headless-carousel-native`](./packages/native) | `1.0.0` | React Native engine using native `FlatList` & viewability sync |
 
 ---
 
@@ -32,19 +32,19 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 ### Web (React)
 ```bash
 # npm
-npm install @universal-headless-carousel/web
+npm install universal-headless-carousel-web
 
 # pnpm
-pnpm add @universal-headless-carousel/web
+pnpm add universal-headless-carousel-web
 ```
 
 ### React Native
 ```bash
 # npm
-npm install @universal-headless-carousel/native @universal-headless-carousel/core
+npm install universal-headless-carousel-native universal-headless-carousel-core
 
 # pnpm
-pnpm add @universal-headless-carousel/native @universal-headless-carousel/core
+pnpm add universal-headless-carousel-native universal-headless-carousel-core
 ```
 
 ---
@@ -55,7 +55,7 @@ pnpm add @universal-headless-carousel/native @universal-headless-carousel/core
 
 ```tsx
 import React from 'react';
-import { useWebCarousel } from '@universal-headless-carousel/web';
+import { useWebCarousel } from 'universal-headless-carousel-web';
 
 const items = ['Slide 1', 'Slide 2', 'Slide 3', 'Slide 4'];
 
@@ -142,7 +142,7 @@ export function WebCarouselExample() {
 ```tsx
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Dimensions } from 'react-native';
-import { useNativeCarousel } from '@universal-headless-carousel/native';
+import { useNativeCarousel } from 'universal-headless-carousel-native';
 
 const { width: WINDOW_WIDTH } = Dimensions.get('window');
 const ITEM_WIDTH = WINDOW_WIDTH * 0.8;

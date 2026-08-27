@@ -59,7 +59,7 @@ importers:
 
   packages/native:
     dependencies:
-      '@universal-headless-carousel/core':
+      universal-headless-carousel-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -84,7 +84,7 @@ importers:
 
   packages/web:
     dependencies:
-      '@universal-headless-carousel/core':
+      universal-headless-carousel-core:
         specifier: workspace:*
         version: link:../core
     devDependencies:

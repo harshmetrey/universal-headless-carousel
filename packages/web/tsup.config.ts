@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   minify: false,
   treeshake: true,
-  external: ['react', 'react-dom', '@universal-headless-carousel/core']
+  external: ['react', 'react-dom', 'universal-headless-carousel-core']
 });
