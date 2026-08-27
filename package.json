@@ -1,5 +1,5 @@
 {
-  "name": "universal-headless-carousel-monorepo",
+  "name": "universal-headless-carousel",
   "private": false,
   "version": "1.0.0",
   "packageManager": "pnpm@11.24.0",
