@@ -1,0 +1,29 @@
+{
+  "name": "universal-headless-carousel-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@11.24.0",
+  "description": "Headless cross-platform (React & React Native) carousel monorepo",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rimraf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.2",
+    "tsup": "^8.3.6",
+    "rimraf": "^6.0.1"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
