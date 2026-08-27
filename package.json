@@ -1,6 +1,6 @@
 {
   "name": "universal-headless-carousel-monorepo",
-  "private": true,
+  "private": false,
   "version": "1.0.0",
   "packageManager": "pnpm@11.24.0",
   "description": "Headless cross-platform (React & React Native) carousel monorepo",
