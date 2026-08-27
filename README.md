@@ -10,10 +10,10 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 ## 🎨 Visual Previews
 
 ### 🌐 Web Carousel (CSS Scroll Snap Engine)
-![Web Carousel Preview](./docs/images/web-carousel-v2.jpg)
+![Web Carousel Preview](https://raw.githubusercontent.com/harshmetrey/universal-headless-carousel/main/docs/images/web-carousel-v2.jpg)
 
 ### 📱 React Native Carousel (`FlatList` Engine)
-<img src="./docs/images/native-carousel-v2.jpg" width="400" alt="React Native Carousel Preview" />
+<img src="https://raw.githubusercontent.com/harshmetrey/universal-headless-carousel/main/docs/images/native-carousel-v2.jpg" width="400" alt="React Native Carousel Preview" />
 
 ---
 
@@ -21,9 +21,9 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 
 | Package | Version | Description |
 | :--- | :--- | :--- |
-| [`universal-headless-carousel-core`](./packages/core) | `1.0.0` | Framework-agnostic state machine & math engine |
-| [`universal-headless-carousel-web`](./packages/web) | `1.0.0` | Web engine utilizing hardware-accelerated CSS Scroll Snap |
-| [`universal-headless-carousel-native`](./packages/native) | `1.0.0` | React Native engine using native `FlatList` & viewability sync |
+| [`universal-headless-carousel-core`](./packages/core) | `1.0.1` | Framework-agnostic state machine & math engine |
+| [`universal-headless-carousel-web`](./packages/web) | `1.0.1` | Web engine utilizing hardware-accelerated CSS Scroll Snap |
+| [`universal-headless-carousel-native`](./packages/native) | `1.0.1` | React Native engine using native `FlatList` & viewability sync |
 
 ---
 
@@ -32,30 +32,30 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 ### Web (React)
 ```bash
 # npm
-npm install universal-headless-carousel-web
+npm install universal-headless-carousel
 
 # pnpm
-pnpm add universal-headless-carousel-web
+pnpm add universal-headless-carousel
 ```
 
 ### React Native
 ```bash
 # npm
-npm install universal-headless-carousel-native universal-headless-carousel-core
+npm install universal-headless-carousel
 
 # pnpm
-pnpm add universal-headless-carousel-native universal-headless-carousel-core
+pnpm add universal-headless-carousel
 ```
 
 ---
 
 ## 💡 Quick Start
 
-### 🌐 1. Web Example (`@universal-headless-carousel/web`)
+### 🌐 1. Web Example (`universal-headless-carousel/web`)
 
 ```tsx
 import React from 'react';
-import { useWebCarousel } from 'universal-headless-carousel-web';
+import { useWebCarousel } from 'universal-headless-carousel/web';
 
 const items = ['Slide 1', 'Slide 2', 'Slide 3', 'Slide 4'];
 
@@ -137,12 +137,12 @@ export function WebCarouselExample() {
 
 ---
 
-### 📱 2. React Native Example (`@universal-headless-carousel/native`)
+### 📱 2. React Native Example (`universal-headless-carousel/native`)
 
 ```tsx
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Dimensions } from 'react-native';
-import { useNativeCarousel } from 'universal-headless-carousel-native';
+import { useNativeCarousel } from 'universal-headless-carousel/native';
 
 const { width: WINDOW_WIDTH } = Dimensions.get('window');
 const ITEM_WIDTH = WINDOW_WIDTH * 0.8;
@@ -206,7 +206,7 @@ export function NativeCarouselExample() {
 
 ## ♿️ Accessibility (A11y)
 
-Both `@universal-headless-carousel/web` and `@universal-headless-carousel/native` auto-inject compliant WAI-ARIA Attributes:
+Both `universal-headless-carousel/web` and `universal-headless-carousel/native` auto-inject compliant WAI-ARIA Attributes:
 - **Container**: `role="region"`, `aria-roledescription="carousel"`, `aria-label="Carousel"`.
 - **Keyboard Navigation**:
   - `ArrowLeft`: Navigate to previous slide.
