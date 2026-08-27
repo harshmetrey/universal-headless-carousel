@@ -3,109 +3,59 @@ import { useCarousel } from 'universal-headless-carousel-core';
 import { UseNativeCarouselOptions, UseNativeCarouselReturn, FlatListProps, NativeItemProps } from './types';
 
 export function useNativeCarousel(options: UseNativeCarouselOptions): UseNativeCarouselReturn {
-  const {
-    itemWidth,
-    viewabilityThreshold = 50,
-    animated = true,
-    ...coreOptions
-  } = options;
-
+  const { itemWidth, ...coreOptions } = options;
   const core = useCarousel(coreOptions);
   const flatListRef = useRef<any>(null);
-  const isScrollingProgrammatically = useRef<boolean>(false);
 
-  const scrollToIndex = useCallback(
-    (index: number, isAnimated = animated) => {
-      if (!flatListRef.current || options.itemsCount <= 0) return;
-      const safeIndex = Math.max(0, Math.min(options.itemsCount - 1, index));
-
-      isScrollingProgrammatically.current = true;
-      try {
-        flatListRef.current.scrollToIndex({
-          index: safeIndex,
-          animated: isAnimated
-        });
-      } catch (err) {
-        // Fallback to scrollToOffset if item layout is not pre-computed
-        if (itemWidth) {
-          flatListRef.current.scrollToOffset({
-            offset: safeIndex * itemWidth,
-            animated: isAnimated
-          });
-        }
-      }
-
-      setTimeout(() => {
-        isScrollingProgrammatically.current = false;
-      }, 300);
+  const scrollTo = useCallback(
+    (index: number) => {
+      flatListRef.current?.scrollToIndex({
+        index,
+        animated: true
+      });
     },
-    [animated, options.itemsCount, itemWidth]
+    []
   );
 
-  // Sync scroll position when activeIndex changes in core
   useEffect(() => {
-    scrollToIndex(core.activeIndex);
-  }, [core.activeIndex, scrollToIndex]);
-
-  const onViewableItemsChanged = useCallback(
-    (info: { viewableItems: Array<{ index: number | null }> }) => {
-      if (isScrollingProgrammatically.current) return;
-      if (info.viewableItems.length > 0) {
-        const firstVisibleIndex = info.viewableItems[0].index;
-        if (firstVisibleIndex !== null && firstVisibleIndex !== undefined && firstVisibleIndex !== core.activeIndex) {
-          core.goTo(firstVisibleIndex);
-        }
-      }
-    },
-    [core]
-  );
+    scrollTo(core.activeIndex);
+  }, [core.activeIndex, scrollTo]);
 
   const getFlatListProps = useCallback(
-    (customProps: Partial<FlatListProps> = {}): FlatListProps => {
-      const baseProps: FlatListProps = {
-        horizontal: true,
-        showsHorizontalScrollIndicator: false,
-        onViewableItemsChanged: (info) => {
-          if (customProps.onViewableItemsChanged) {
-            customProps.onViewableItemsChanged(info);
-          }
-          onViewableItemsChanged(info);
-        },
-        viewabilityConfig: customProps.viewabilityConfig || {
-          itemVisiblePercentThreshold: viewabilityThreshold
-        },
-        accessibilityRole: 'adjustable',
-        ...customProps
-      };
-
-      if (itemWidth) {
-        baseProps.snapToInterval = itemWidth;
-        baseProps.decelerationRate = 'fast';
-        baseProps.getItemLayout = customProps.getItemLayout || ((_, index) => ({
-          length: itemWidth,
-          offset: itemWidth * index,
-          index
-        }));
-      } else {
-        baseProps.pagingEnabled = true;
+    (): FlatListProps => ({
+      horizontal: true,
+      pagingEnabled: false,
+      snapToInterval: itemWidth,
+      decelerationRate: 'fast',
+      showsHorizontalScrollIndicator: false,
+      getItemLayout: (_data: any, index: number) => ({
+        length: itemWidth,
+        offset: itemWidth * index,
+        index
+      }),
+      onScrollToIndexFailed: (info) => {
+        setTimeout(() => {
+          flatListRef.current?.scrollToIndex({
+            index: info.index,
+            animated: true
+          });
+        }, 50);
       }
-
-      return baseProps;
-    },
-    [onViewableItemsChanged, viewabilityThreshold, itemWidth]
+    }),
+    [itemWidth]
   );
 
   const getItemProps = useCallback(
-    (index: number, customProps: Partial<NativeItemProps> = {}): NativeItemProps => {
-      const isActive = index === core.activeIndex;
+    (index: number): NativeItemProps => {
+      const coreProps = core.getItemProps(index);
       return {
-        accessibilityRole: 'none',
-        accessibilityLabel: customProps.accessibilityLabel || `Slide ${index + 1} of ${options.itemsCount}`,
-        accessibilityState: { selected: isActive },
-        ...customProps
+        ...coreProps,
+        style: {
+          width: itemWidth
+        }
       };
     },
-    [core.activeIndex, options.itemsCount]
+    [core, itemWidth]
   );
 
   return {
@@ -113,6 +63,6 @@ export function useNativeCarousel(options: UseNativeCarouselOptions): UseNativeC
     flatListRef,
     getFlatListProps,
     getItemProps,
-    scrollToIndex
+    scrollTo
   };
 }

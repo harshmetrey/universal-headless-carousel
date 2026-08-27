@@ -1,44 +1,31 @@
 import { RefObject } from 'react';
-import { UseCarouselOptions, UseCarouselReturn } from 'universal-headless-carousel-core';
+import { FlatListProps as RNFlatListProps, ViewStyle } from 'react-native';
+import { UseCarouselOptions, UseCarouselReturn, ItemProps } from 'universal-headless-carousel-core';
 
 export interface UseNativeCarouselOptions extends UseCarouselOptions {
   /**
-   * Width of each item in points/pixels for React Native snapToInterval calculation.
+   * Width of each item slide in pixels for snapToInterval calculation.
    */
-  itemWidth?: number;
-  /**
-   * Viewability threshold percentage for onViewableItemsChanged.
-   * @default 50
-   */
-  viewabilityThreshold?: number;
-  /**
-   * Whether to animate programmatic scrolling.
-   * @default true
-   */
-  animated?: boolean;
+  itemWidth: number;
 }
 
-export interface FlatListProps<T = any> {
+export interface NativeItemProps extends Omit<ItemProps, 'style'> {
+  style?: ViewStyle;
+}
+
+export interface FlatListProps extends Partial<RNFlatListProps<any>> {
   horizontal: boolean;
   pagingEnabled?: boolean;
   snapToInterval?: number;
   decelerationRate?: 'fast' | 'normal' | number;
   showsHorizontalScrollIndicator: boolean;
-  onViewableItemsChanged: (info: { viewableItems: Array<{ index: number | null }> }) => void;
-  viewabilityConfig: { itemVisiblePercentThreshold: number };
-  getItemLayout?: (data: T[] | null | undefined, index: number) => { length: number; offset: number; index: number };
-  accessibilityRole: string;
+  onScrollToIndexFailed?: (info: { index: number; highestMeasuredFrameIndex: number; averageItemLength: number }) => void;
+  getItemLayout?: (data: any, index: number) => { length: number; offset: number; index: number };
 }
 
-export interface NativeItemProps {
-  accessibilityRole: string;
-  accessibilityLabel: string;
-  accessibilityState: { selected: boolean };
-}
-
-export interface UseNativeCarouselReturn extends Omit<UseCarouselReturn, 'getContainerProps' | 'getItemProps'> {
+export interface UseNativeCarouselReturn extends Omit<UseCarouselReturn, 'getItemProps'> {
   flatListRef: RefObject<any>;
-  getFlatListProps: (customProps?: Partial<FlatListProps>) => FlatListProps;
-  getItemProps: (index: number, customProps?: Partial<NativeItemProps>) => NativeItemProps;
-  scrollToIndex: (index: number, animated?: boolean) => void;
+  getFlatListProps: () => FlatListProps;
+  getItemProps: (index: number) => NativeItemProps;
+  scrollTo: (index: number) => void;
 }

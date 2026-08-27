@@ -3,7 +3,7 @@
 [![CI/CD Publish Pipeline](https://github.com/harshmetrey/universal-headless-carousel/actions/workflows/publish.yml/badge.svg)](https://github.com/harshmetrey/universal-headless-carousel/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A headless, cross-platform (React & React Native) carousel npm package built with TypeScript, CSS Scroll Snap, and native `FlatList` physics. Zero forced UI, 100% style customization, and production-grade accessibility (A11y).
+A cross-platform (React & React Native) carousel npm package with **ready-to-use drop-in UI components** AND **headless hooks**. Built with TypeScript, CSS Scroll Snap, and native `FlatList` physics. Zero forced UI, 100% style customization, and production-grade accessibility (A11y).
 
 ---
 
@@ -22,23 +22,13 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 | Package | Version | Description |
 | :--- | :--- | :--- |
 | [`universal-headless-carousel-core`](./packages/core) | `1.0.3` | Framework-agnostic state machine & math engine |
-| [`universal-headless-carousel-web`](./packages/web) | `1.0.3` | Web engine utilizing hardware-accelerated CSS Scroll Snap |
-| [`universal-headless-carousel-native`](./packages/native) | `1.0.3` | React Native engine using native `FlatList` & viewability sync |
+| [`universal-headless-carousel-web`](./packages/web) | `1.0.3` | Web engine & `<Carousel />` drop-in component |
+| [`universal-headless-carousel-native`](./packages/native) | `1.0.3` | React Native engine & `<NativeCarousel />` drop-in component |
 
 ---
 
 ## 🚀 Installation
 
-### Web (React)
-```bash
-# npm
-npm install universal-headless-carousel
-
-# pnpm
-pnpm add universal-headless-carousel
-```
-
-### React Native
 ```bash
 # npm
 npm install universal-headless-carousel
@@ -51,153 +41,89 @@ pnpm add universal-headless-carousel
 
 ## 💡 Quick Start
 
-### 🌐 1. Web Example (`universal-headless-carousel/web`)
+### 🌐 1. Drop-in Web Component (`<Carousel />`)
 
 ```tsx
 import React from 'react';
-import { useWebCarousel } from 'universal-headless-carousel/web';
+import { Carousel } from 'universal-headless-carousel/web';
 
-const items = ['Slide 1', 'Slide 2', 'Slide 3', 'Slide 4'];
-
-export function WebCarouselExample() {
-  const {
-    activeIndex,
-    next,
-    prev,
-    goTo,
-    isFirst,
-    isLast,
-    isPlaying,
-    play,
-    pause,
-    getContainerProps,
-    getItemProps
-  } = useWebCarousel({
-    itemsCount: items.length,
-    loop: true,
-    autoplay: 3000,
-    snapAlign: 'center'
-  });
-
+export function WebComponentExample() {
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto' }}>
-      {/* Scroll Snap Container */}
-      <div
-        {...getContainerProps({
-          style: { gap: '1rem', padding: '1rem' }
-        })}
-      >
-        {items.map((item, index) => (
-          <div
-            key={index}
-            {...getItemProps(index, {
-              style: {
-                width: '80%',
-                height: 200,
-                backgroundColor: index === activeIndex ? '#3b82f6' : '#e5e7eb',
-                color: index === activeIndex ? '#fff' : '#1f2937',
-                borderRadius: 12,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-                transition: 'background-color 0.3s ease'
-              }
-            })}
-          >
-            {item}
-          </div>
-        ))}
-      </div>
-
-      {/* Controls & Pagination */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
-        <button onClick={prev}>Previous</button>
-        <div>
-          {items.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goTo(index)}
-              style={{
-                fontWeight: index === activeIndex ? 'bold' : 'normal',
-                margin: '0 4px'
-              }}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-        <button onClick={next}>Next</button>
-      </div>
-    </div>
+    <Carousel
+      items={[
+        <div key="1" style={{ padding: 40, background: '#3b82f6', color: '#fff', borderRadius: 12 }}>Slide 1</div>,
+        <div key="2" style={{ padding: 40, background: '#10b981', color: '#fff', borderRadius: 12 }}>Slide 2</div>,
+        <div key="3" style={{ padding: 40, background: '#8b5cf6', color: '#fff', borderRadius: 12 }}>Slide 3</div>
+      ]}
+      loop
+      autoplay={3000}
+      showArrows
+      showDots
+    />
   );
 }
 ```
 
 ---
 
-### 📱 2. React Native Example (`universal-headless-carousel/native`)
+### 📱 2. Drop-in React Native Component (`<NativeCarousel />`)
 
 ```tsx
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, Dimensions } from 'react-native';
-import { useNativeCarousel } from 'universal-headless-carousel/native';
+import { View, Text } from 'react-native';
+import { NativeCarousel } from 'universal-headless-carousel/native';
 
-const { width: WINDOW_WIDTH } = Dimensions.get('window');
-const ITEM_WIDTH = WINDOW_WIDTH * 0.8;
+export function NativeComponentExample() {
+  return (
+    <NativeCarousel
+      itemWidth={300}
+      items={[
+        <View key="1" style={{ height: 200, backgroundColor: '#3b82f6', borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: '#fff', fontSize: 20 }}>Native Slide 1</Text>
+        </View>,
+        <View key="2" style={{ height: 200, backgroundColor: '#10b981', borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: '#fff', fontSize: 20 }}>Native Slide 2</Text>
+        </View>
+      ]}
+      loop
+      showArrows
+      showDots
+    />
+  );
+}
+```
 
-const items = ['Native Slide 1', 'Native Slide 2', 'Native Slide 3'];
+---
 
-export function NativeCarouselExample() {
-  const {
-    activeIndex,
-    flatListRef,
-    next,
-    prev,
-    goTo,
-    getFlatListProps,
-    getItemProps
-  } = useNativeCarousel({
+### 🛠 3. Headless Web Hook (`useWebCarousel`)
+
+For custom layouts or DOM-level control:
+
+```tsx
+import React from 'react';
+import { useWebCarousel } from 'universal-headless-carousel/web';
+
+const items = ['Slide 1', 'Slide 2', 'Slide 3'];
+
+export function CustomWebCarousel() {
+  const { activeIndex, next, prev, getContainerProps, getItemProps } = useWebCarousel({
     itemsCount: items.length,
-    itemWidth: ITEM_WIDTH,
-    loop: true
+    loop: true,
+    autoplay: 3000
   });
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <FlatList
-        ref={flatListRef}
-        data={items}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <View
-            {...getItemProps(index)}
-            style={{
-              width: ITEM_WIDTH,
-              height: 200,
-              backgroundColor: index === activeIndex ? '#10b981' : '#d1d5db',
-              borderRadius: 16,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginHorizontal: (WINDOW_WIDTH - ITEM_WIDTH) / 2
-            }}
-          >
-            <Text style={{ fontSize: 20, color: '#fff', fontWeight: 'bold' }}>{item}</Text>
-          </View>
-        )}
-        {...getFlatListProps()}
-      />
-
-      <View style={{ flexDirection: 'row', marginTop: 16 }}>
-        <TouchableOpacity onPress={prev} style={{ padding: 10 }}>
-          <Text>Prev</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={next} style={{ padding: 10 }}>
-          <Text>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <div>
+      <div {...getContainerProps()}>
+        {items.map((item, i) => (
+          <div key={i} {...getItemProps(i)}>
+            {item} (Active: {i === activeIndex ? 'Yes' : 'No'})
+          </div>
+        ))}
+      </div>
+      <button onClick={prev}>Prev</button>
+      <button onClick={next}>Next</button>
+    </div>
   );
 }
 ```
@@ -206,7 +132,7 @@ export function NativeCarouselExample() {
 
 ## ♿️ Accessibility (A11y)
 
-Both `universal-headless-carousel/web` and `universal-headless-carousel/native` auto-inject compliant WAI-ARIA Attributes:
+Both Web and React Native components auto-inject compliant WAI-ARIA Attributes:
 - **Container**: `role="region"`, `aria-roledescription="carousel"`, `aria-label="Carousel"`.
 - **Keyboard Navigation**:
   - `ArrowLeft`: Navigate to previous slide.
