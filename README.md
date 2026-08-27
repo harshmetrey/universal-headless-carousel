@@ -7,6 +7,16 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 
 ---
 
+## 🎨 Visual Previews
+
+### 🌐 Web Carousel (CSS Scroll Snap Engine)
+![Web Carousel Preview](./docs/images/web-carousel.jpg)
+
+### 📱 React Native Carousel (`FlatList` Engine)
+<img src="./docs/images/native-carousel.jpg" width="400" alt="React Native Carousel Preview" />
+
+---
+
 ## 📦 Packages
 
 | Package | Version | Description |
