@@ -3,8 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Universal Headless Carousel - Minimal Demo</title>
+  <title>Universal Headless Carousel - Interactive Customizer Demo</title>
   <style>
+    :root {
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --subtext: #64748b;
+      --card-bg: #ffffff;
+      --card-border: 2px solid #e2e8f0;
+      --card-text: #334155;
+      --active-border: #2563eb;
+      --active-text: #2563eb;
+      --active-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+      --dot-bg: #cbd5e1;
+      --dot-active: #2563eb;
+      --toolbar-bg: #ffffff;
+      --toolbar-border: 1px solid #e2e8f0;
+    }
+
+    /* Dark Mode Theme */
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --text: #f8fafc;
+      --subtext: #94a3b8;
+      --card-bg: #1e293b;
+      --card-border: 2px solid #334155;
+      --card-text: #f1f5f9;
+      --active-border: #3b82f6;
+      --active-text: #60a5fa;
+      --active-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+      --dot-bg: #475569;
+      --dot-active: #3b82f6;
+      --toolbar-bg: #1e293b;
+      --toolbar-border: 1px solid #334155;
+    }
+
+    /* Vibrant Glassmorphism Theme */
+    [data-theme="glass"] {
+      --bg: #0b0f19;
+      --text: #ffffff;
+      --subtext: #94a3b8;
+      --card-bg: rgba(255, 255, 255, 0.06);
+      --card-border: 1px solid rgba(255, 255, 255, 0.15);
+      --card-text: #ffffff;
+      --active-border: 1px solid #06b6d4;
+      --active-text: #06b6d4;
+      --active-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
+      --dot-bg: rgba(255, 255, 255, 0.2);
+      --dot-active: #06b6d4;
+      --toolbar-bg: rgba(255, 255, 255, 0.05);
+      --toolbar-border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -13,37 +63,85 @@
     }
 
     body {
-      background-color: #f8fafc;
-      color: #0f172a;
+      background-color: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 2rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .demo-header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .demo-header h1 {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 700;
-      color: #0f172a;
     }
 
     .demo-header p {
-      color: #64748b;
+      color: var(--subtext);
       margin-top: 0.25rem;
-      font-size: 0.95rem;
+      font-size: 1rem;
+    }
+
+    /* Interactive Customization Toolbar */
+    .customizer-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: var(--toolbar-bg);
+      border: var(--toolbar-border);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .control-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--subtext);
+    }
+
+    .control-group select {
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+    }
+
+    [data-theme="dark"] .control-group select,
+    [data-theme="glass"] .control-group select {
+      background: #334155;
+      color: #ffffff;
+      border-color: #475569;
     }
 
     /* Headless Carousel Container */
     .carousel-container {
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
     }
 
     .carousel-viewport {
@@ -61,29 +159,30 @@
       display: none;
     }
 
-    /* Minimal Card Styling */
+    /* Flexible Card Styling */
     .carousel-slide {
       scroll-snap-align: center;
       flex-shrink: 0;
-      width: 80%;
-      height: 220px;
-      border-radius: 12px;
-      background-color: #ffffff;
-      border: 2px solid #e2e8f0;
+      width: 75%;
+      height: 240px;
+      border-radius: 16px;
+      background-color: var(--card-bg);
+      border: var(--card-border);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 600;
-      color: #334155;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      color: var(--card-text);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .carousel-slide[data-active="true"] {
-      border-color: #2563eb;
-      color: #2563eb;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+      border: var(--active-border);
+      color: var(--active-text);
+      box-shadow: var(--active-shadow);
+      transform: scale(1.02);
     }
 
     /* Clean Controls */
@@ -91,120 +190,262 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 1rem;
+      margin-top: 1.25rem;
     }
 
     button.btn-nav {
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      background: white;
-      color: #334155;
-      font-weight: 500;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      border: var(--toolbar-border);
+      background: var(--toolbar-bg);
+      color: var(--text);
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s ease;
+      transition: all 0.15s ease;
     }
 
     button.btn-nav:hover {
-      background: #f1f5f9;
+      opacity: 0.85;
     }
 
     .pagination {
       display: flex;
       gap: 0.5rem;
+      align-items: center;
     }
 
     .dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: #cbd5e1;
+      background: var(--dot-bg);
       cursor: pointer;
-      transition: background 0.2s ease, transform 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .dot[data-active="true"] {
-      background: #2563eb;
-      transform: scale(1.2);
+      background: var(--dot-active);
+      transform: scale(1.3);
+      width: 24px;
+      border-radius: 9999px;
     }
   </style>
 </head>
-<body>
+<body data-theme="light">
 
   <div class="demo-header">
     <h1>Universal Headless Carousel</h1>
-    <p>Minimal & Headless: 100% UI Customization</p>
+    <p>Live Interactive Customizer Demo</p>
+  </div>
+
+  <!-- Dropdown Customizer Toolbar -->
+  <div class="customizer-toolbar">
+    <div class="control-group">
+      <label for="snapAlignSelect">Snap Alignment</label>
+      <select id="snapAlignSelect">
+        <option value="center" selected>Center</option>
+        <option value="start">Start</option>
+        <option value="end">End</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="loopSelect">Loop Mode</label>
+      <select id="loopSelect">
+        <option value="true" selected>Enabled</option>
+        <option value="false">Disabled</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="autoplaySelect">Autoplay</label>
+      <select id="autoplaySelect">
+        <option value="0" selected>Disabled</option>
+        <option value="2000">2 Seconds</option>
+        <option value="3000">3 Seconds</option>
+        <option value="5000">5 Seconds</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="itemsCountSelect">Item Count</label>
+      <select id="itemsCountSelect">
+        <option value="3">3 Items</option>
+        <option value="5" selected>5 Items</option>
+        <option value="8">8 Items</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="themeSelect">UI Theme</label>
+      <select id="themeSelect">
+        <option value="light" selected>Minimal Light</option>
+        <option value="dark">Dark Slate</option>
+        <option value="glass">Vibrant Glass</option>
+      </select>
+    </div>
   </div>
 
   <div class="carousel-container">
-    <div class="carousel-viewport" id="viewport" role="region" aria-roledescription="carousel" aria-label="Simple Carousel" tabindex="0">
-      <div class="carousel-slide" data-index="0" data-active="true" role="group" aria-roledescription="slide">Slide 1</div>
-      <div class="carousel-slide" data-index="1" data-active="false" role="group" aria-roledescription="slide">Slide 2</div>
-      <div class="carousel-slide" data-index="2" data-active="false" role="group" aria-roledescription="slide">Slide 3</div>
-      <div class="carousel-slide" data-index="3" data-active="false" role="group" aria-roledescription="slide">Slide 4</div>
+    <div class="carousel-viewport" id="viewport" role="region" aria-roledescription="carousel" aria-label="Customizable Carousel" tabindex="0">
+      <!-- Slides dynamically generated -->
     </div>
 
     <div class="controls">
       <button class="btn-nav" id="prev">Previous</button>
       <div class="pagination" id="pagination">
-        <div class="dot" data-index="0" data-active="true"></div>
-        <div class="dot" data-index="1" data-active="false"></div>
-        <div class="dot" data-index="2" data-active="false"></div>
-        <div class="dot" data-index="3" data-active="false"></div>
+        <!-- Dots dynamically generated -->
       </div>
       <button class="btn-nav" id="next">Next</button>
     </div>
   </div>
 
   <script>
+    // State Config
+    let snapAlign = 'center';
+    let loop = true;
+    let autoplayInterval = 0;
+    let itemsCount = 5;
     let activeIndex = 0;
-    const count = 4;
-    const viewport = document.getElementById('viewport');
-    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
-    const dots = Array.from(document.querySelectorAll('.dot'));
+    
     let isProgrammatic = false;
-    let timer;
+    let scrollTimer = null;
+    let autoplayTimer = null;
 
-    function render(idx) {
-      activeIndex = (idx + count) % count;
-      slides.forEach((s, i) => s.setAttribute('data-active', i === activeIndex));
-      dots.forEach((d, i) => d.setAttribute('data-active', i === activeIndex));
-    }
+    const viewport = document.getElementById('viewport');
+    const pagination = document.getElementById('pagination');
 
-    function scrollTo(idx) {
-      render(idx);
-      const target = slides[activeIndex];
-      if (target) {
-        isProgrammatic = true;
-        clearTimeout(timer);
-        const offset = target.offsetLeft - (viewport.clientWidth - target.clientWidth) / 2;
-        viewport.scrollTo({ left: Math.max(0, offset), behavior: 'smooth' });
-        timer = setTimeout(() => { isProgrammatic = false; }, 400);
+    function rebuildDOM() {
+      viewport.innerHTML = '';
+      pagination.innerHTML = '';
+
+      for (let i = 0; i < itemsCount; i++) {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        slide.style.scrollSnapAlign = snapAlign;
+        slide.setAttribute('data-index', i);
+        slide.setAttribute('data-active', i === activeIndex ? 'true' : 'false');
+        slide.setAttribute('role', 'group');
+        slide.setAttribute('aria-roledescription', 'slide');
+        slide.innerHTML = `<span>Slide ${i + 1}</span>`;
+        viewport.appendChild(slide);
+
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.setAttribute('data-index', i);
+        dot.setAttribute('data-active', i === activeIndex ? 'true' : 'false');
+        dot.addEventListener('click', () => scrollTo(i));
+        pagination.appendChild(dot);
       }
     }
 
+    function renderState(idx) {
+      if (loop) {
+        activeIndex = (idx + itemsCount) % itemsCount;
+      } else {
+        activeIndex = Math.max(0, Math.min(itemsCount - 1, idx));
+      }
+
+      const slides = Array.from(viewport.querySelectorAll('.carousel-slide'));
+      const dots = Array.from(pagination.querySelectorAll('.dot'));
+
+      slides.forEach((s, i) => s.setAttribute('data-active', i === activeIndex ? 'true' : 'false'));
+      dots.forEach((d, i) => d.setAttribute('data-active', i === activeIndex ? 'true' : 'false'));
+    }
+
+    function scrollTo(idx) {
+      renderState(idx);
+      const slides = Array.from(viewport.querySelectorAll('.carousel-slide'));
+      const target = slides[activeIndex];
+      if (target) {
+        isProgrammatic = true;
+        clearTimeout(scrollTimer);
+
+        let offset = target.offsetLeft - (viewport.clientWidth - target.clientWidth) / 2;
+        if (snapAlign === 'start') offset = target.offsetLeft;
+        if (snapAlign === 'end') offset = target.offsetLeft - (viewport.clientWidth - target.clientWidth);
+
+        viewport.scrollTo({ left: Math.max(0, offset), behavior: 'smooth' });
+        scrollTimer = setTimeout(() => { isProgrammatic = false; }, 400);
+      }
+    }
+
+    function setupAutoplay() {
+      if (autoplayTimer) clearInterval(autoplayTimer);
+      if (autoplayInterval > 0) {
+        autoplayTimer = setInterval(() => {
+          scrollTo(activeIndex + 1);
+        }, autoplayInterval);
+      }
+    }
+
+    // Scroll listener for manual touch/mouse swiping
     viewport.addEventListener('scroll', () => {
       if (isProgrammatic) return;
       const left = viewport.scrollLeft;
       let closest = activeIndex;
       let min = Infinity;
+      const slides = Array.from(viewport.querySelectorAll('.carousel-slide'));
+
       slides.forEach((s, i) => {
-        const offset = s.offsetLeft - (viewport.clientWidth - s.clientWidth) / 2;
-        const d = Math.abs(offset - left);
-        if (d < min) { min = d; closest = i; }
+        let target = s.offsetLeft - (viewport.clientWidth - s.clientWidth) / 2;
+        if (snapAlign === 'start') target = s.offsetLeft;
+        if (snapAlign === 'end') target = s.offsetLeft - (viewport.clientWidth - s.clientWidth);
+        const dist = Math.abs(target - left);
+        if (dist < min) { min = dist; closest = i; }
       });
-      if (closest !== activeIndex) render(closest);
+
+      if (closest !== activeIndex) renderState(closest);
     });
 
     document.getElementById('prev').onclick = () => scrollTo(activeIndex - 1);
     document.getElementById('next').onclick = () => scrollTo(activeIndex + 1);
-    dots.forEach(d => {
-      d.onclick = () => scrollTo(parseInt(d.getAttribute('data-index'), 10));
-    });
+
     viewport.onkeydown = (e) => {
       if (e.key === 'ArrowLeft') scrollTo(activeIndex - 1);
       if (e.key === 'ArrowRight') scrollTo(activeIndex + 1);
+      if (e.key === 'Home') scrollTo(0);
+      if (e.key === 'End') scrollTo(itemsCount - 1);
     };
+
+    // Dropdown Event Listeners
+    document.getElementById('snapAlignSelect').addEventListener('change', (e) => {
+      snapAlign = e.target.value;
+      rebuildDOM();
+      scrollTo(activeIndex);
+    });
+
+    document.getElementById('loopSelect').addEventListener('change', (e) => {
+      loop = e.target.value === 'true';
+    });
+
+    document.getElementById('autoplaySelect').addEventListener('change', (e) => {
+      autoplayInterval = parseInt(e.target.value, 10);
+      setupAutoplay();
+    });
+
+    document.getElementById('itemsCountSelect').addEventListener('change', (e) => {
+      itemsCount = parseInt(e.target.value, 10);
+      if (activeIndex >= itemsCount) activeIndex = 0;
+      rebuildDOM();
+      scrollTo(activeIndex);
+    });
+
+    document.getElementById('themeSelect').addEventListener('change', (e) => {
+      document.body.setAttribute('data-theme', e.target.value);
+    });
+
+    // Pause Autoplay on Hover
+    viewport.addEventListener('mouseenter', () => {
+      if (autoplayTimer) clearInterval(autoplayTimer);
+    });
+    viewport.addEventListener('mouseleave', () => {
+      setupAutoplay();
+    });
+
+    // Initial Init
+    rebuildDOM();
+    scrollTo(0);
   </script>
 </body>
 </html>
