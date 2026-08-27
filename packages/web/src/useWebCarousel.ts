@@ -72,12 +72,32 @@ export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselRe
 
   // Sync scroll position when activeIndex changes in core
   useEffect(() => {
-    // If state change originated from user manual scroll, do not re-trigger programmatic scrollTo
     if (isManualScroll.current) {
       isManualScroll.current = false;
       return;
     }
     scrollTo(core.activeIndex);
+  }, [core.activeIndex, scrollTo]);
+
+  // Handle window/container resizes to keep active item aligned responsively
+  useEffect(() => {
+    const container = containerNodeRef.current;
+    if (!container) return;
+
+    const handleResize = () => {
+      scrollTo(core.activeIndex);
+    };
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const observer = new ResizeObserver(() => {
+        handleResize();
+      });
+      observer.observe(container);
+      return () => observer.disconnect();
+    } else {
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
   }, [core.activeIndex, scrollTo]);
 
   const handleScroll = useCallback(
