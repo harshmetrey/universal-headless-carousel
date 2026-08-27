@@ -1,9 +1,35 @@
 {
   "name": "universal-headless-carousel",
-  "private": false,
   "version": "1.0.0",
-  "packageManager": "pnpm@11.24.0",
-  "description": "Headless cross-platform (React & React Native) carousel monorepo",
+  "packageManager": "npm@11.16.0",
+  "description": "Headless, cross-platform (React & React Native) carousel engine with CSS Scroll Snap & FlatList physics",
+  "main": "./packages/core/dist/index.js",
+  "module": "./packages/core/dist/index.mjs",
+  "types": "./packages/core/dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./packages/core/dist/index.d.ts",
+      "import": "./packages/core/dist/index.mjs",
+      "require": "./packages/core/dist/index.js"
+    },
+    "./web": {
+      "types": "./packages/web/dist/index.d.ts",
+      "import": "./packages/web/dist/index.mjs",
+      "require": "./packages/web/dist/index.js"
+    },
+    "./native": {
+      "types": "./packages/native/dist/index.d.ts",
+      "import": "./packages/native/dist/index.mjs",
+      "require": "./packages/native/dist/index.js"
+    }
+  },
+  "files": [
+    "packages/core/dist",
+    "packages/web/dist",
+    "packages/native/dist",
+    "README.md",
+    "LICENSE"
+  ],
   "workspaces": [
     "packages/*"
   ],
@@ -12,13 +38,27 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "clean": "turbo run clean && rimraf node_modules"
+    "clean": "turbo run clean && rimraf node_modules",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-native": "*"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "turbo": "^2.4.0",
-    "typescript": "^5.7.2",
+    "rimraf": "^6.0.1",
     "tsup": "^8.3.6",
-    "rimraf": "^6.0.1"
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.2"
   },
   "overrides": {
     "esbuild": "^0.28.1",
@@ -26,5 +66,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
