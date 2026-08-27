@@ -1,6 +1,6 @@
 {
   "name": "universal-headless-carousel-web",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CSS Scroll Snap Web engine wrapper for universal-headless-carousel",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

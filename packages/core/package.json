@@ -1,6 +1,6 @@
 {
   "name": "universal-headless-carousel-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Headless, framework-agnostic carousel logic & accessibility state engine",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

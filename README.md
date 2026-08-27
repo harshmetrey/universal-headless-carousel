@@ -21,9 +21,9 @@ A headless, cross-platform (React & React Native) carousel npm package built wit
 
 | Package | Version | Description |
 | :--- | :--- | :--- |
-| [`universal-headless-carousel-core`](./packages/core) | `1.0.1` | Framework-agnostic state machine & math engine |
-| [`universal-headless-carousel-web`](./packages/web) | `1.0.1` | Web engine utilizing hardware-accelerated CSS Scroll Snap |
-| [`universal-headless-carousel-native`](./packages/native) | `1.0.1` | React Native engine using native `FlatList` & viewability sync |
+| [`universal-headless-carousel-core`](./packages/core) | `1.0.2` | Framework-agnostic state machine & math engine |
+| [`universal-headless-carousel-web`](./packages/web) | `1.0.2` | Web engine utilizing hardware-accelerated CSS Scroll Snap |
+| [`universal-headless-carousel-native`](./packages/native) | `1.0.2` | React Native engine using native `FlatList` & viewability sync |
 
 ---
 

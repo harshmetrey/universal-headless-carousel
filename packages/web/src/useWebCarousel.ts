@@ -131,7 +131,9 @@ export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselRe
   );
 
   const getContainerProps = useCallback(
-    (customProps: Partial<WebContainerProps> = {}): WebContainerProps => {
+    <T extends HTMLElement = HTMLElement>(
+      customProps: Partial<WebContainerProps<T>> = {}
+    ): WebContainerProps<T> => {
       const coreContainerProps = core.getContainerProps(customProps);
 
       const hideScrollbarStyles: React.CSSProperties = hideScrollbar
@@ -152,13 +154,13 @@ export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselRe
 
       return {
         ...coreContainerProps,
-        ref: setContainerRef,
+        ref: (node: T | null) => setContainerRef(node),
         style: containerStyle,
-        onScroll: (e: UIEvent<HTMLElement>) => {
+        onScroll: (e: React.UIEvent<T>) => {
           if (customProps.onScroll) {
             customProps.onScroll(e);
           }
-          handleScroll(e);
+          handleScroll(e as unknown as UIEvent<HTMLElement>);
         }
       };
     },
@@ -166,10 +168,13 @@ export function useWebCarousel(options: UseWebCarouselOptions): UseWebCarouselRe
   );
 
   const getItemProps = useCallback(
-    (index: number, customProps: Partial<WebItemProps> = {}): WebItemProps => {
+    <T extends HTMLElement = HTMLElement>(
+      index: number,
+      customProps: Partial<WebItemProps<T>> = {}
+    ): WebItemProps<T> => {
       const coreItemProps = core.getItemProps(index, customProps);
 
-      const setItemRef = (node: HTMLElement | null) => {
+      const setItemRef = (node: T | null) => {
         if (node) {
           itemNodesRef.current.set(index, node);
         } else {
